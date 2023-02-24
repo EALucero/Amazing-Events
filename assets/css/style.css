@@ -1,0 +1,52 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header nav a {
+    background-color: aliceblue;
+    border: 1px solid black;
+    color: black;
+    padding: 0 0.4vw;
+    text-decoration: none;
+}
+
+main div button {
+    border: 0;
+    font-size: 4vh;
+}
+main div #flexCheck {border: 1px solid black;}
+
+main div #search {width: 25vw;}
+
+main .card {
+    border: 1px solid aquamarine;   
+}
+
+main .card img {
+    height: 30vh;
+    max-width: 18vw;
+}
+
+main .card p {overflow-wrap: normal;}
+
+main .card a {height: 4vh;}
+
+footer .redes a {
+    border: 0;
+    font-size: 4vh;
+}
+
+main table th {font-size: 2.8vh;}
+
+main table td {width: 33rem;}
+
+main .detail {
+    border: 1px solid black;
+    height: 80vh;
+}
+
+main form fieldset {
+    direction: column;
+}
