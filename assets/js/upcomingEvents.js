@@ -7,7 +7,7 @@ const Show = (upcomingEvents) => {
     console.log(upcomingEvents);
 
     upcomingEvents.forEach(e => {
-        cardList.innerHTML += `<div class="card text-center m-2 mt-5">
+        cardList.innerHTML += `<div class="col-2 card text-center m-2 mt-5">
             <img src="${e.image}" class="card-img-top" alt="imagen">
             <div class="card-body">
                 <h5 class="card-title">${e.name}</h5>
