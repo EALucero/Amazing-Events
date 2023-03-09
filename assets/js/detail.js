@@ -17,4 +17,6 @@ detail.innerHTML = `<img class="detailImage" src="${event.image}" alt="evento">
         <p>Capacity: ${event.capacity}</p>
         <p>Assistance: ${!isNaN(event.assistance)?event.assistance : "in progress"}</p>
         <p>Price: $${event.price}</p>
+        <a href="./" type="button" class="btn btn-outline-primary btn-sm mt-2">Return</a>
     </div>`;
+    

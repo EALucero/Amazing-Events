@@ -59,18 +59,6 @@ const events = {
             }
         });
 
-        /* let listCat = "";
-            let checked = document.querySelector("inputs");
-
-            categories.forEach(c => checkBox(category)) */
-
-            {/* <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="${category}" id="flexCheck">
-                    <label class="form-check-label" for="flexCheck">${category}</label>
-                </div> */}
-
-
-
         let checkList = document.getElementById("checkList");
         let checkboxes = "";
 
@@ -82,17 +70,6 @@ const events = {
         });
 
         checkList.innerHTML += checkboxes;
-
-        ////////////
-
-        
-
-        /* categories.forEach(i => {
-            let c = i[i];
-            input.addEventListener('change', () => {
-                console.log((input.checked? "" : "de") + "seleccionando categoría " + input.value);
-            });
-        }); */
     },
     categoryProcess: (params) => {
         let chkboxList = document.querySelectorAll("input[type=checkbox]");    
@@ -113,37 +90,32 @@ const events = {
                     events.createCards(selectedHTML);
                 } else {
                     events.createCards(params)
-                }       
+                }   
             }    
         });
     },
     search: () => {
-        /* let resultados = [];
         let form = document.querySelector('form');
-        let inputSearch = document.getElementById("search");
 
-        document.querySelector("form-search".onsubmit = e => {
-            
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
-            console.log("caca");
-            let inputText = inputSearch.value.toLowerCase();
-            resultados = [];
-
+            let results = [];
+            let inputSearch = document.querySelector('input[name=search]').value;
+            let inputText = inputSearch.trim().toLowerCase();
+        
             data.events.forEach(e => {
                 if(e.name.toLowerCase().includes(inputText) || e.description.toLowerCase().includes(inputText)) {
-                    e.push(resultados);
+                    results.push(e);
                 }
             });
 
-            console.log(resultados);
-        
-        });
- */
-
-        /* resultados.forEach(r => {
-
-        });  */
-
+            if (results.length > 0) {
+                events.createCards(results);
+            } else {
+                alert("not results");
+                /* events.createCards(params) */
+            }
+        }); 
     }
 };
 

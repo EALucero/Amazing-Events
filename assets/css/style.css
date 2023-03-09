@@ -58,12 +58,14 @@ main form fieldset {
 
 main #detail {
     border: 1px solid aquamarine;
+    border-radius: 25px;
     height: auto;
     justify-content: center;
-    margin: 10%;
+    margin: 8% 10%;
+    padding: 1%;
     width: 80%;
 }
 
 main #detail img {
-    width: 50%;
+    width: 38rem;
 }

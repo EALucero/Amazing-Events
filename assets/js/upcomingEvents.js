@@ -4,3 +4,4 @@ let upcomingtEvents = events.cardProcess().upcomingEvents;
 events.createCards(upcomingtEvents);
 events.createCategories();
 events.categoryProcess(upcomingtEvents);
+events.search()
