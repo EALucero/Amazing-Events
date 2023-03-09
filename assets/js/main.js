@@ -94,33 +94,30 @@ const events = {
             });
         }); */
     },
-    categoryProcess: () => {
-        let chkboxList = document.querySelectorAll("input[type=checkbox]");
+    categoryProcess: (params) => {
+        let chkboxList = document.querySelectorAll("input[type=checkbox]");    
         let selected = [];
-
+        
         chkboxList.forEach(chk => {
-            chk.addEventListener("change", () => {
-                let selectedHTML = "";
+            chk.onclick = () => {       
+                let selectedHTML = [];
                 selected = Array.from(chkboxList).filter(i => i.checked).map(i => i.value);
-                console.log(selected);
 
                 if (selected.length > 0) {
-                    data.events.filter(e => selected.includes(e.category).forEach(ev => {
-                        selectedHTML += createCards(ev); 
-                        document.getElementById("checkList").innerHTML = selectedHTML;
-                    }));
+                    params.forEach(e => {
+                        if (!selectedHTML.includes(e) && selected.includes(e.category)) {
+                            selectedHTML.push(e);
+                        }                  
+                    });
+
+                    events.createCards(selectedHTML);
                 } else {
-                    
-                }
-
-            })
-
-            
+                    events.createCards(params)
+                }       
+            }    
         });
     },
     search: () => {
-        /* let categories = document.querySelector("input"); */
-        
         /* let resultados = [];
         let form = document.querySelector('form');
         let inputSearch = document.getElementById("search");

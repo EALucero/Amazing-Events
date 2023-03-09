@@ -3,4 +3,4 @@ import events from "./main.js";
 
 events.createCards(data.events);
 events.createCategories();
-events.categoryProcess();
+events.categoryProcess(data.events);
