@@ -1,7 +1,8 @@
 import events from "./main.js";
 
-let upcomingtEvents = events.cardProcess().upcomingEvents;
-events.createCards(upcomingtEvents);
+let upcomingEvents = events.cardProcess().upcomingEvents;
+
+events.createCards(upcomingEvents);
 events.createCategories();
-events.categoryProcess(upcomingtEvents);
-events.search()
+events.categoryProcess(upcomingEvents);
+events.search(upcomingEvents)

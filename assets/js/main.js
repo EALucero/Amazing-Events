@@ -88,22 +88,23 @@ const events = {
                     });
 
                     events.createCards(selectedHTML);
+                    events.search(selectedHTML)
                 } else {
                     events.createCards(params)
                 }   
             }    
         });
     },
-    search: () => {
+    search: (params) => {
         let form = document.querySelector('form');
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            let results = [];
             let inputSearch = document.querySelector('input[name=search]').value;
             let inputText = inputSearch.trim().toLowerCase();
+            let results = [];
         
-            data.events.forEach(e => {
+            params.forEach(e => {
                 if(e.name.toLowerCase().includes(inputText) || e.description.toLowerCase().includes(inputText)) {
                     results.push(e);
                 }
@@ -111,10 +112,12 @@ const events = {
 
             if (results.length > 0) {
                 events.createCards(results);
-            } else {
-                alert("not results");
-                /* events.createCards(params) */
-            }
+                events.search(results);
+            } /* else {
+                console.log("t");
+                let error = document.querySelector('error');
+                error.innerHTML += "<p>not results</p>";
+            } */
         }); 
     }
 };
