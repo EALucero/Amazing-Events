@@ -11,8 +11,7 @@ data.events.forEach(e => {
   }
 
   attArr.push(e);
-
-  e.capacity != undefined? eveCap.push(e) : "";
+  eveCap.push(e);
 });
 
 let high = [];
@@ -33,8 +32,6 @@ attArr.forEach(e => low.push(e));
 eveCap.sort((a, b) => {
   return (a.capacity > b.capacity? -1 : a.capacity < b.capacity? 1 : 0);
 })
-
-console.log(eveCap);
 
 let eventList = document.getElementById("eventList");
 let highRows = "";

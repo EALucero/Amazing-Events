@@ -2,8 +2,8 @@ const events = {
     controller: (data, objs) => {
         events.cardProcess(data)
         events.createCategories(objs)
-        events.categoryProcess(objs);
-        events.search(objs)
+        events.filter(objs);
+        /* events.search(objs) */
         events.createCards(objs)
     },
     date: (eDate, cDate) => {
@@ -16,7 +16,7 @@ const events = {
         let pastEvents = [];
         let upcomingEvents = [];
         let todayEvents = [];
-        
+
         data.events.forEach(e => {
             let eDate = e.date;
 
@@ -33,13 +33,13 @@ const events = {
             }
         });
 
-        return {pastEvents, upcomingEvents, todayEvents};
+        return { pastEvents, upcomingEvents, todayEvents };
     },
-    createCards: (params) => {   
+    createCards: (params) => {
         let cardList = document.getElementById("cardList");
         let cards = "";
 
-        params.forEach(e => { 
+        params.forEach(e => {
             cards += `<div class="card text-center m-4">
                     <img src="${e.image}" class="card-img-top" alt="imagen">
                     <div class="card-body">
@@ -53,15 +53,13 @@ const events = {
                 </div>`
         });
 
-        console.log(typeof(cards));
-
         cardList.innerHTML = cards;
     },
     createCategories: (params) => {
         let categories = [];
 
         params.forEach(e => {
-            if(!categories.includes(e.category)) {
+            if (!categories.includes(e.category)) {
                 categories.push(e.category);
             }
         });
@@ -69,7 +67,7 @@ const events = {
         let checkList = document.getElementById("checkList");
         let checkboxes = "";
 
-        categories.forEach(cat => { 
+        categories.forEach(cat => {
             checkboxes += `<div class="form-check">
                 <input class="form-check-input flexCheck" type="checkbox" id="${cat}"value="${cat}">
                 <label class="form-check-label" form="${cat}">${cat}</label>
@@ -78,77 +76,55 @@ const events = {
 
         checkList.innerHTML += checkboxes;
     },
-    categoryProcess: (params) => {
+    filter: (params) => {
         let chkboxList = document.querySelectorAll("input[type=checkbox]");
-        let categories = [];   
-        let selected = [];
-        
+        let inputSearch = document.querySelector('input[name=search]');
+
         chkboxList.forEach(chk => {
-            chk.onclick = () => {       
-                let selectedHTML = [];
-                selected = Array.from(chkboxList).filter(i => i.checked).map(i => i.value);
+            chk.addEventListener("change", () => {
+                renderSearch();
+            })
+        })
 
-                if (selected.length > 0) {
-                    params.forEach(e => {
-                        if (!selectedHTML.includes(e) && selected.includes(e.category)) {
-                            selectedHTML.push(e);
-                        }
-                        
-                        categories.push(e.category);
-                    });
-                    console.log(categories);
-                } else {
-                    events.createCards(params)
-                }  
+        inputSearch.addEventListener("input",() => {
+            renderSearch();
+        })
 
-                events.createCards(selectedHTML);
-                events.search(selectedHTML)
-                return selected;
-            }   
-        });
+        function isChecked() {
+            let checkList = [];
 
-        console.log(categories);
-    },
-    search: (params) => {
-        let form = document.querySelector('form');
-        let message = "";
-
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            let inputSearch = document.querySelector('input[name=search]').value;
-            let inputText = inputSearch.trim().toLowerCase();
-            let results = [];
-        
-            params.forEach(e => {
-                if(e.name.toLowerCase().includes(inputText) || e.description.toLowerCase().includes(inputText)) {
-                    results.push(e);
+            chkboxList.forEach(checkbox => {
+                if (checkbox.checked) {
+                    checkList.push(checkbox.value);
                 }
             });
+            
+            return checkList;
+        }
+
+        function renderSearch() {
+            let checkList = isChecked();
+            let inputText = inputSearch.value.trim().toLowerCase();
+
+            let results = params.filter(event =>
+                event.name.toLowerCase().includes(inputText)
+                || event.description.toLowerCase().includes(inputText));
+
+            if(checkList.length > 0){
+                results = results.filter(e => checkList.includes(e.category))
+            } 
+
+            let error = document.getElementById("error");
 
             if (results.length > 0) {
+                error.innerHTML = "";
                 events.createCards(results);
-                events.search(results);
             } else {
-                message = "<p>not results</p>";
-                return message;        
+                error.innerHTML = "<p>Not found</p>";
+                events.createCards(params);
             }
-            console.log(message);
-        });
-
-        console.log(message);
-        if (message != "") {
-            let error = document.getElementById('error');
-            error.innerHTML += "<p>not results</p>";
         }
-    },
-    filter: () => {
-        let primerFiltro = this.backupPersonajes.filter(personaje => personaje.name.toLowerCase().includes(this.texto.toLowerCase()))
-        if (this.casasSeleccionadas.length > 0) {
-            this.personajes = primerFiltro.filter(personaje => this.casasSeleccionadas.includes(personaje.house))
-        } else {
-            this.personajes = this.primerFiltro;
-        }
-    }       
+    }
 };
 
 export default events;
