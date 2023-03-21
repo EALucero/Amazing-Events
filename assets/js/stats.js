@@ -80,8 +80,8 @@ eventList.innerHTML += `<tr>
             <td>${capRows}</td>
         </tr>`;
 
-let sumUpPrice = [];
-let sumPaPrice = 0;
+let sumUpPrice = [0,0,0,0,0,0,0];
+let sumPaPrice = [0,0,0,0,0,0,0];
 let upcomingEvents = events.cardProcess(data).upcomingEvents;
 let pastEvents = events.cardProcess(data).pastEvents;
 
@@ -92,18 +92,36 @@ categories.sort().forEach(cat => {
   catRows += `<p>${cat}</p>`
 });
 
-const compArray = (a, b) => {
-  a.forEach((e, i) => {
-    console.log(e.category, b[i]);
-    if (e.category == b[i] && b[i] != undefined) {
-      sumUpPrice[i] += e.price;
-    }
+const compArray = (events, categories, arr) => {
+  events.forEach(e => {
+    categories.forEach((c,i) => {
+      if (e.category == c) {
+        /* console.log(e.category + " " + e.price); */
+        arr[i] += e.price;
+        /* console.log(arr[i]); */
+      }
+    })
   })
 }
 
-compArray(upcomingEvents, categories);
+compArray(upcomingEvents, categories, sumUpPrice);
+compArray(pastEvents, categories, sumPaPrice);
 
-console.log(sumUpPrice);
+/* const rowConstruc = (arr, arg) => {
+  arr.forEach(a => {
+    arg += `<p>$ ${a}</p>`
+  });
+
+  return arg;
+}
+
+rowConstruc(sumUpPrice, upPriceRows); */
+
+let upPriceRows = "";
+
+sumUpPrice.forEach(up => {
+  upPriceRows += `<p>$ ${up}</p>`
+});
 
 upcoList.innerHTML += `<tr>
     <th colspan="3">Upcoming events statistics by category</th>
@@ -115,12 +133,16 @@ upcoList.innerHTML += `<tr>
   </tr>
   <tr>
     <td>${catRows}</td>
-    <td>${sumUpPrice}</td>
+    <td>${upPriceRows}</td>
     <td></td>
   </tr>`;
 
 let pastList = document.getElementById("pastList");
-let pastRows = "";
+let paPriceRows = "";
+
+sumPaPrice.forEach(pa => {
+  paPriceRows += `<p>$ ${pa}</p>`
+});
 
 pastList.innerHTML += `<tr>
     <th colspan="3">Past events statistics by category</th>
@@ -132,6 +154,6 @@ pastList.innerHTML += `<tr>
   </tr>
   <tr>
     <td>${catRows}</td>
-    <td></td>
+    <td>${paPriceRows}</td>
     <td></td>
   </tr>`;
