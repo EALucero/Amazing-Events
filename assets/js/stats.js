@@ -7,7 +7,7 @@ let eveCap = [];
 
 data.events.forEach(e => {
   if (e.assistance == undefined) {
-    e.assistance = "soon";
+    e.assistance = 0;
   }
 
   attArr.push(e);
@@ -17,14 +17,19 @@ data.events.forEach(e => {
 let high = [];
 let low = [];
 
+let porcEv = (e) => {
+  let porc = (e.assistance * 100 / e.capacity);
+  return parseFloat(porc).toFixed(2);
+}
+
 attArr.sort((a, b) => {
-  return (a.assistance > b.assistance? -1 : a.assistance < b.assistance? 1 : 0);
+  return (porcEv(a) > porcEv(b)? -1 : porcEv(a) < porcEv(b)? 1 : 0);
 })
 
 attArr.forEach(e => high.push(e));
 
 attArr.sort(function (a, b) {
-  return (b.assistance > a.assistance? -1 : b.assistance < a.assistance? 1 : 0);
+  return (porcEv(b) > porcEv(a)? -1 : porcEv(b) < porcEv(a)? 1 : 0);
 });
 
 attArr.forEach(e => low.push(e));
@@ -40,13 +45,13 @@ let capRows = "";
 
 high.forEach(h => {
   highRows += `<p class="d-flex justify-content-between">
-            <span class="ps-5">${h.name}</span><span class="pe-5">${h.assistance}</span>
+            <span class="ps-5">${h.name}</span><span class="pe-5">${porcEv(h)} %</span>
             </p>`
 });
 
 low.forEach(l => {
   lowRows += `<p class="d-flex justify-content-between">
-            <span class="ps-5">${l.name}</span><span class="pe-5">${l.assistance}</span>
+            <span class="ps-5">${l.name}</span><span class="pe-5">${porcEv(l)} %</span>
             </p>`
 });
 
