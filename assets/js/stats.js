@@ -23,8 +23,8 @@ let high = [];
 let low = [];
 
 const porcEv = (e) => {
-  let porc = (e.assistance * 100 / e.capacity);
-  return parseFloat(porc).toFixed(2);
+  let porc = e.assistance * 100 / e.capacity;
+  return parseFloat(porc);
 }
 
 attArr.sort((a, b) => {
@@ -50,13 +50,13 @@ let capRows = "";
 
 high.forEach(h => {
   highRows += `<p class="d-flex justify-content-between">
-            <span class="ps-5">${h.name}</span><span class="pe-5">${porcEv(h)} %</span>
+            <span class="ps-5">${h.name}</span><span class="pe-5">${porcEv(h) != 0? porcEv(h).toFixed(2) : 0} %</span>
             </p>`
 });
 
 low.forEach(l => {
   lowRows += `<p class="d-flex justify-content-between">
-            <span class="ps-5">${l.name}</span><span class="pe-5">${porcEv(l)} %</span>
+            <span class="ps-5">${l.name}</span><span class="pe-5">${porcEv(l) != 0? porcEv(l).toFixed(2) : 0} %</span>
             </p>`
 });
 
@@ -80,32 +80,47 @@ eventList.innerHTML += `<tr>
             <td>${capRows}</td>
         </tr>`;
 
-let sumUpPrice = [0,0,0,0,0,0,0];
-let sumPaPrice = [0,0,0,0,0,0,0];
+let sumUpPrice = [];
+let sumUpAss = [];
+let sumPaPrice = [];
+let sumPaAss = [];
+let upPorcAss = [];
+let paPorcAss = [];
+let countUp = [];
+let countPa = [];
+
 let upcomingEvents = events.cardProcess(data).upcomingEvents;
 let pastEvents = events.cardProcess(data).pastEvents;
 
 let upcoList = document.getElementById("upcoList");
 let catRows = "";
 
-categories.sort().forEach(cat => {
+categories.sort().forEach((cat, i) => {
   catRows += `<p>${cat}</p>`
+  sumUpPrice[i] = 0;
+  sumUpAss[i] = 0;
+  sumPaPrice[i] = 0;
+  sumPaAss[i] = 0;
+  countUp[i] = 0;
+  countPa[i] = 0;
+  upPorcAss[i] = 0;
+  paPorcAss[i] = 0;
 });
 
-const compArray = (events, categories, arr) => {
-  events.forEach(e => {
+const compArray = (events, categories, arr1, arr2, arr3, count) => {
+  events.forEach((e) => {  
     categories.forEach((c,i) => {
       if (e.category == c) {
-        /* console.log(e.category + " " + e.price); */
-        arr[i] += e.price;
-        /* console.log(arr[i]); */
-      }
-    })
-  })
-}
+        arr1[i] += e.price;
+        arr2[i] += porcEv(e);
+        count[i]++;
+        arr3[i] = arr2[i] != 0? (arr2[i] / count[i]).toFixed(2) : 0; 
+      }   
+    });    
+  });
+};
 
-compArray(upcomingEvents, categories, sumUpPrice);
-compArray(pastEvents, categories, sumPaPrice);
+compArray(upcomingEvents, categories, sumUpPrice, sumUpAss, upPorcAss, countUp);
 
 /* const rowConstruc = (arr, arg) => {
   arr.forEach(a => {
@@ -118,10 +133,10 @@ compArray(pastEvents, categories, sumPaPrice);
 rowConstruc(sumUpPrice, upPriceRows); */
 
 let upPriceRows = "";
+let upAssRows = "";
 
-sumUpPrice.forEach(up => {
-  upPriceRows += `<p>$ ${up}</p>`
-});
+sumUpPrice.forEach(up => upPriceRows += `<p>$ ${up}</p>`);
+upPorcAss.forEach(p => upAssRows += `<p>${p} %</p>`);
 
 upcoList.innerHTML += `<tr>
     <th colspan="3">Upcoming events statistics by category</th>
@@ -134,15 +149,17 @@ upcoList.innerHTML += `<tr>
   <tr>
     <td>${catRows}</td>
     <td>${upPriceRows}</td>
-    <td></td>
+    <td>${upAssRows}</td>
   </tr>`;
 
 let pastList = document.getElementById("pastList");
 let paPriceRows = "";
+let paAssRows = ""
 
-sumPaPrice.forEach(pa => {
-  paPriceRows += `<p>$ ${pa}</p>`
-});
+compArray(pastEvents, categories, sumPaPrice, sumPaAss, paPorcAss, countPa);
+
+sumPaPrice.forEach(pa => paPriceRows += `<p>$ ${pa}</p>`);
+paPorcAss.forEach(p => paAssRows += `<p>${p} %</p>`);
 
 pastList.innerHTML += `<tr>
     <th colspan="3">Past events statistics by category</th>
@@ -155,5 +172,5 @@ pastList.innerHTML += `<tr>
   <tr>
     <td>${catRows}</td>
     <td>${paPriceRows}</td>
-    <td></td>
+    <td>${paAssRows}</td>
   </tr>`;

@@ -67,7 +67,7 @@ const events = {
         let checkList = document.getElementById("checkList");
         let checkboxes = "";
 
-        categories.forEach(cat => {
+        categories.sort().forEach(cat => {
             checkboxes += `<div class="form-check">
                 <input class="form-check-input flexCheck" type="checkbox" id="${cat}"value="${cat}">
                 <label class="form-check-label" form="${cat}">${cat}</label>
